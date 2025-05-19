@@ -1,3 +1,4 @@
-dash
+pyserial
 pandas
 plotly
+dash
