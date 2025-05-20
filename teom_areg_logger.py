@@ -28,7 +28,7 @@ REGISTER_DEFINITIONS = [
     {'code':  '39', 'label': 'Main Flow', 'unit': 'lpm'},
     {'code':  '40', 'label': 'Aux Flow', 'unit': 'lpm'},
     {'code':  '41', 'label': 'Status', 'unit': 'code'},
-    {'code':  '42', 'label': 'K0 Constant', 'unit': 'N/A'},
+    {'code':  '42', 'label': 'K0 Constant', 'unit': 'g/s²'},
     {'code':  '57', 'label': 'Mass Concentration (30min Avg)', 'unit': 'µg/m³'},
     {'code':  '58', 'label': 'Mass Concentration (1hr Avg)', 'unit': 'µg/m³'},
     {'code':  '63', 'label': 'Serial Number', 'unit': 'N/A'},

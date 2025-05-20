@@ -38,7 +38,7 @@ def load_data():
 
             # Convert to numeric and handle missing/invalid values
             freq = pd.to_numeric(df['Frequency (hz)'], errors='coerce')
-            k0 = pd.to_numeric(df['K0 Constant (N/A)'], errors='coerce')
+            k0 = pd.to_numeric(df['K0 Constant (g/s²)'], errors='coerce')
             flow = pd.to_numeric(df['Main Flow (lpm)'], errors='coerce')
 
             # f1 = current frequency, f0 = frequency 6 samples ago
