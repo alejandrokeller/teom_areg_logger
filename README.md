@@ -16,11 +16,11 @@ A browser-based dashboard provides real-time and historical data visualization.
    ```bash
    pip install -r requirements.txt
    ```
-4. **Create the default `config.ini` file:
+4. **Create the `config.ini`** file:
    ```bash
    cp config.template config.ini
    ```
-5. **Edit `config.ini` according to the configuration section below**
+5. **Edit `config.ini`** according to the configuration section below
 6. **Start the logger**:
    ```bash
    python teom_areg_logger.py
