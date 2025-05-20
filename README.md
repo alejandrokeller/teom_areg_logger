@@ -4,6 +4,16 @@ A simple Python-based logger and dashboard for the **TEOM 1400AB** air quality m
 This tool logs data from the TEOM via serial port and stores daily CSV files.  
 A browser-based dashboard provides real-time and historical data visualization.
 
+## 📚 Table of Contents
+
+- [🚀 Usage](#-usage)
+- [⚙️ Configuration](#️-configuration)
+- [📋 Logged Parameters](#-logged-parameters)
+- [📊 Dashboard Overview](#-dashboard-overview)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [🧪 About the Derived Mass Concentration](#-about-the-derived-mass-concentration)
+- [📄 License](#-license)
+
 ---
 
 ## 🚀 Usage
