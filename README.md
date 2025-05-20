@@ -29,6 +29,53 @@ A browser-based dashboard provides real-time and historical data visualization.
 
 ---
 
+## 📋 Logged Parameters
+
+The logger script `teom_areg_logger.py` records the following parameters from the TEOM 1400AB every 10 seconds (default):
+
+| Parameter                             | Unit     |
+|---------------------------------------|----------|
+| Mass Rate                             | µg/h     |
+| Mass Concentration                    | µg/m³    |
+| Total Mass                            | µg       |
+| Frequency                             | hz       |
+| Noise                                 | µg       |
+| Filter Loading                        | %        |
+| Main Flow                             | lpm      |
+| Aux Flow                              | lpm      |
+| Status                                | code     |
+| K0 Constant                           | N/A      |
+| Mass Concentration (30min Avg)        | µg/m³    |
+| Mass Concentration (1hr Avg)          | µg/m³    |
+| Serial Number                         | N/A      |
+| Ambient Temperature                   | °C       |
+| Ambient Pressure                      | atm      |
+
+These are retrieved via AREG queries and saved to a daily CSV file.
+
+## 📊 Dashboard Overview
+
+The dashboard provides an interactive, browser-based interface to visualize and monitor TEOM 1400AB data. Key features include:
+
+- **Time range selector** with presets (e.g., Last Hour, Today, This Month)
+- **Multi-parameter graph** with optional separate Y-axes
+- **Data resampling** to display raw data or averaged over 1min/10min/hour
+- **Live values** for:
+  - `Main Flow (lpm)`
+  - `Filter Loading (%)`
+- **Filter condition indicator lamp**:
+  - 🟢 **Green**: Filter Loading < 60%
+  - 🟡 **Yellow**: Filter Loading ≥ 60%
+  - 🔴 **Red**: 
+    - Filter Loading ≥ 90%
+    - Filter Loading ≥ 80% and Main Flow < 3 lpm
+  - When red, a warning message appears: `Replace filter soon!`
+
+### Example Dashboard:
+![Dashboard Screenshot](images/dashboard.png)
+
+---
+
 ## 🐛 Troubleshooting
 
 If you encounter this error:

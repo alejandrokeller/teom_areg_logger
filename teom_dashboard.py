@@ -118,6 +118,24 @@ app.layout = html.Div([
     ], style={'marginBottom': '20px'}),
     
     dcc.Store(id='selected-parameters-store'),
+    
+    html.Div([
+        html.Div(id='main-flow-display', style={'fontSize': '18px', 'marginBottom': '5px'}),
+
+        html.Div([
+            html.Div(id='filter-loading-display', style={'fontSize': '18px', 'marginRight': '10px'}),
+            html.Div(id='filter-indicator-lamp', style={
+                'width': '25px',
+                'height': '25px',
+                'borderRadius': '50%',
+                'border': '2px solid black',
+                'marginRight': '10px'
+            }),
+            html.Div(id='filter-warning-text', style={'fontSize': '16px', 'color': 'red'})
+        ], style={'display': 'flex', 'alignItems': 'center', 'gap': '10px'})
+    ], style={'marginBottom': '30px'}),
+
+    
     dcc.Graph(id='parameter-graph')
 ])
 
@@ -170,6 +188,51 @@ def update_date_range(preset, _):
         raise dash.exceptions.PreventUpdate
     else:
         return now - pd.Timedelta(hours=6), now
+    
+@app.callback(
+    Output('main-flow-display', 'children'),
+    Output('filter-loading-display', 'children'),
+    Output('filter-indicator-lamp', 'style'),
+    Output('filter-warning-text', 'children'),
+    Input('interval-update', 'n_intervals')
+)
+def update_live_display(n):
+    df = load_data()
+    if df.empty or 'Main Flow (lpm)' not in df.columns or 'Filter Loading (%)' not in df.columns:
+        return "Main Flow: --", "Filter Loading: --", {'backgroundColor': 'grey'}, ""
+
+    latest = df.iloc[-1]
+    flow = float(latest['Main Flow (lpm)'])
+    loading = float(latest['Filter Loading (%)'])
+
+    # Determine lamp color and warning
+    color = 'green'
+    warning = ""
+    if loading >= 90:
+        color = 'red'
+        warning = "Replace filter soon!"
+    elif loading >= 80 and flow < 3:
+        color = 'red'
+        warning = "Replace filter soon!"
+    elif loading >= 60:
+        color = 'yellow'
+
+    lamp_style = {
+        'width': '25px',
+        'height': '25px',
+        'borderRadius': '50%',
+        'border': '2px solid black',
+        'backgroundColor': color,
+        'marginRight': '10px'
+    }
+
+    return (
+        f"Main Flow: {flow:.2f} lpm",
+        f"Filter Loading: {loading:.1f} %",
+        lamp_style,
+        warning
+    )
+
 
 @app.callback(
     Output('parameter-graph', 'figure'),
