@@ -20,7 +20,7 @@ A browser-based dashboard provides real-time and historical data visualization.
    ```bash
    cp config.template config.ini
    ```
-5. **Edit `config.ini` according to the [configuration](#⚙️ Configuration) section below**
+5. **Edit `config.ini` according to the configuration section below**
 6. **Start the logger**:
    ```bash
    python teom_areg_logger.py
@@ -55,10 +55,20 @@ This file centralizes logger and dashboard settings for easier modification with
 
 ### `teom_dashboard.py`
 
-| Variable              | Description                                                    | Default      |
-|-----------------------|----------------------------------------------------------------|--------------|
-| `LOG_DIR`             | Directory where CSV logs are located                           | `'logs'`     |
-| `UNFILTERED_STEPS`    | Number of samples (back in time) to compute unfiltered mass    | `30`         |
+| Variable               | Description                                                    | Default      |
+|------------------------|----------------------------------------------------------------|--------------|
+| `UNFILTERED_STEPS`     | Number of samples (back in time) to compute unfiltered mass    | `30`         |
+| `LOG_DIR`              | Directory where CSV logs are located                           | `'logs'`     |
+| `UNFILTERED_STEPS`     | Number of samples (back in time) to compute unfiltered mass    | `30`         |
+| `DEFAULT_RESAMPLE`     | Smoothing interval. Use `'False'` for raw data (see list)      | `False`      |
+| `DEFAULT_TIME_RANGE`   | Default display interval at dashboard start (see list)         | `'last_hour'` |
+| `YELLOW_THRESHOLD`     | Threshold for filter load warning (see dashboard section)      | `60`         |
+| `RED_THRESHOLD_FLOW_3` | Threshold for filter load warning (see dashboard section)      | `90`         |
+| `RED_THRESHOLD_FLOW_LOW` | Threshold for filter load warning (see dashboard section)    | `80`         |
+
+Posible values for `DEFAULT_RESAMPLE`: `False`, `'1min'`, `'10min'`, `'1H'`
+
+Posible values for `DEFAULT_TIME_RANGE`: `'last_hour'`, `'last_6_hours'`, `'last_12_hours'`, `'today'`, `'this_month'`, `'custom'`
 
 ### Example `config.ini`
 
