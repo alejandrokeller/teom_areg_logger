@@ -164,6 +164,9 @@ app.layout = html.Div([
             tooltip={"placement": "bottom", "always_visible": False}
         )
     ], id='unfiltered-slider-container', style={'display': 'none', 'marginTop': '20px'}),
+    
+    html.Button("Download CSV", id="download-button", n_clicks=0),
+    dcc.Download(id="download-data")
 
 ])
 
@@ -372,6 +375,37 @@ def update_graph(selected_params, resample_freq, n, start_date, end_date, multi_
 
     fig.update_layout(**layout)
     return fig
+
+@app.callback(
+    Output("download-data", "data"),
+    Input("download-button", "n_clicks"),
+    State("parameter-dropdown", "value"),
+    State("resample-dropdown", "value"),
+    State("date-range-picker", "start_date"),
+    State("date-range-picker", "end_date"),
+    State("multi-axis-toggle", "value"),
+    State("unfiltered-steps-slider", "value"),
+    prevent_initial_call=True
+)
+def download_filtered_data(n_clicks, selected_params, resample_freq, start_date, end_date, multi_axis_toggle, unfiltered_steps):
+    df = load_data(unfiltered_steps=unfiltered_steps)
+    if df.empty or not selected_params:
+        return dcc.send_data_frame(pd.DataFrame().to_csv, "empty.csv")
+
+    start_dt = pd.to_datetime(start_date)
+    end_dt = pd.to_datetime(end_date)
+    if start_dt == end_dt:
+        end_dt += pd.Timedelta(days=1) - pd.Timedelta(seconds=1)
+
+    df_filtered = df[(df['Timestamp'] >= start_dt) & (df['Timestamp'] <= end_dt)]
+
+    if resample_freq:
+        df_filtered = df_filtered.set_index('Timestamp').resample(resample_freq).mean().reset_index()
+
+    if df_filtered.empty:
+        return dcc.send_data_frame(pd.DataFrame().to_csv, "empty.csv")
+
+    return dcc.send_data_frame(df_filtered[['Timestamp'] + selected_params].to_csv, "teom_filtered_data_export.csv")
 
 if __name__ == '__main__':
     app.run(debug=True)
