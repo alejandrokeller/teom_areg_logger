@@ -47,28 +47,28 @@ This file centralizes logger and dashboard settings for easier modification with
 
 | Variable              | Description                                                    | Default      |
 |-----------------------|----------------------------------------------------------------|--------------|
-| `SERIAL_PORT`         | Serial port connected to the TEOM                              | `'COM30'`    |
-| `BAUD_RATE`           | Serial port baud rate for communication with the TEOM          | `'9600'`     |
+| `SERIAL_PORT`         | Serial port connected to the TEOM                              | `COM30`      |
+| `BAUD_RATE`           | Serial port baud rate for communication with the TEOM          | `9600`       |
 | `QUERY_INTERVAL_SECONDS` | Data logging interval (in seconds)                          | `10`         |
-| `LOG_DIR`             | Folder where daily CSV logs are saved                          | `'logs'`     |
-| `TIME_FORMAT`         | Timestamp format for the CSV log file                          | `'%Y-%m-%d %H:%M:%S'`     |
+| `LOG_DIR`             | Folder where daily CSV logs are saved                          | `logs`       |
+| `TIME_FORMAT`         | Timestamp format for the CSV log file                          | `%Y-%m-%d %H:%M:%S`     |
 
 ### `teom_dashboard.py`
 
 | Variable               | Description                                                    | Default      |
 |------------------------|----------------------------------------------------------------|--------------|
 | `UNFILTERED_STEPS`     | Number of samples (back in time) to compute unfiltered mass    | `30`         |
-| `LOG_DIR`              | Directory where CSV logs are located                           | `'logs'`     |
+| `LOG_DIR`              | Directory where CSV logs are located                           | `logs`       |
 | `UNFILTERED_STEPS`     | Number of samples (back in time) to compute unfiltered mass    | `30`         |
 | `DEFAULT_RESAMPLE`     | Smoothing interval. Use `'False'` for raw data (see list)      | `False`      |
-| `DEFAULT_TIME_RANGE`   | Default display interval at dashboard start (see list)         | `'last_hour'` |
+| `DEFAULT_TIME_RANGE`   | Default display interval at dashboard start (see list)         | `last_hour`  |
 | `YELLOW_THRESHOLD`     | Threshold for filter load warning (see dashboard section)      | `60`         |
 | `RED_THRESHOLD_FLOW_3` | Threshold for filter load warning (see dashboard section)      | `90`         |
 | `RED_THRESHOLD_FLOW_LOW` | Threshold for filter load warning (see dashboard section)    | `80`         |
 
-Posible values for `DEFAULT_RESAMPLE`: `False`, `'1min'`, `'10min'`, `'1H'`
+Posible values for `DEFAULT_RESAMPLE`: `False`, `1min`, `10min`, `1H`
 
-Posible values for `DEFAULT_TIME_RANGE`: `'last_hour'`, `'last_6_hours'`, `'last_12_hours'`, `'today'`, `'this_month'`, `'custom'`
+Posible values for `DEFAULT_TIME_RANGE`: `last_hour`, `last_6_hours`, `last_12_hours`, `today`, `this_month`, `custom`
 
 ### Example `config.ini`
 
