@@ -23,7 +23,7 @@ RED_THRESHOLD_FLOW_LOW = float(config['LAMP_THRESHOLDS']['red_threshold_flow_low
 app = dash.Dash(__name__)
 app.title = 'TEOM Logger Dashboard'
 
-def load_data():
+def load_data(unfiltered_steps=None):
     all_files = sorted(LOG_DIR.glob('teom_log_*.csv'))
     df_list = []
     for f in all_files:
@@ -48,10 +48,12 @@ def load_data():
 
             # f1 = current frequency, f0 = frequency 6 samples ago
             f1 = freq
-            f0 = freq.shift(UNFILTERED_STEPS)
+#            f0 = freq.shift(UNFILTERED_STEPS)
+            f0 = freq.shift(unfiltered_steps if unfiltered_steps else UNFILTERED_STEPS)
             
             # Δt between current and 6-previous timestamp
-            delta_t = df['Timestamp'].sub(df['Timestamp'].shift(UNFILTERED_STEPS)).dt.total_seconds() / 60.0
+#            delta_t = df['Timestamp'].sub(df['Timestamp'].shift(UNFILTERED_STEPS)).dt.total_seconds() / 60.0
+            delta_t = df['Timestamp'].sub(df['Timestamp'].shift(unfiltered_steps if unfiltered_steps else UNFILTERED_STEPS)).dt.total_seconds() / 60.0
 
 
             # Avoid division by zero and NaNs
@@ -148,8 +150,31 @@ app.layout = html.Div([
     ], style={'marginBottom': '30px'}),
 
     
-    dcc.Graph(id='parameter-graph')
+    dcc.Graph(id='parameter-graph'),
+    
+    html.Div([
+        html.Label("Unfiltered Mass Steps:"),
+        dcc.Slider(
+            id='unfiltered-steps-slider',
+            min=1,
+            max=120,
+            step=1,
+            value=UNFILTERED_STEPS,  # default from config
+            marks={i: str(i) for i in range(0, 121, 10)},
+            tooltip={"placement": "bottom", "always_visible": False}
+        )
+    ], id='unfiltered-slider-container', style={'display': 'none', 'marginTop': '20px'}),
+
 ])
+
+@app.callback(
+    Output('unfiltered-slider-container', 'style'),
+    Input('parameter-dropdown', 'value')
+)
+def toggle_unfiltered_slider(selected_params):
+    if selected_params and "Mass Concentration unfiltered (µg/m³)" in selected_params:
+        return {'display': 'block', 'marginTop': '20px'}
+    return {'display': 'none'}
 
 @app.callback(
     Output('parameter-dropdown', 'options'),
@@ -270,10 +295,11 @@ def update_live_display(n):
     Input('interval-update', 'n_intervals'),
     Input('date-range-picker', 'start_date'),
     Input('date-range-picker', 'end_date'),
-    Input('multi-axis-toggle', 'value')
+    Input('multi-axis-toggle', 'value'),
+    Input('unfiltered-steps-slider', 'value')
 )
-def update_graph(selected_params, resample_freq, n, start_date, end_date, multi_axis_toggle):
-    df = load_data()
+def update_graph(selected_params, resample_freq, n, start_date, end_date, multi_axis_toggle, unfiltered_steps):
+    df = load_data(unfiltered_steps=unfiltered_steps)
     if df.empty or not selected_params:
         return px.line(title="No data available.")
 
