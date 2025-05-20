@@ -9,23 +9,26 @@ A browser-based dashboard provides real-time and historical data visualization.
 ## 🚀 Usage
 
 1. **Clone or copy** the repository to your desired directory.
-2. **Install dependencies** using:
+   ```bash
+   git clone https://github.com/alejandrokeller/teom_areg_logger
+   ```
+3. **Install dependencies** using:
    ```bash
    pip install -r requirements.txt
    ```
-3. **Edit the serial port** in `teom_areg_logger.py` to match your system:
+4. **Edit the serial port** in `teom_areg_logger.py` to match your system:
    ```python
    SERIAL_PORT = 'COM30'  # Change to your TEOM's port
    ```
-4. **Start the logger**:
+5. **Start the logger**:
    ```bash
    python teom_areg_logger.py
    ```
-5. **In a second terminal**, start the dashboard server:
+6. **In a second terminal**, start the dashboard server:
    ```bash
    python teom_dashboard.py
    ```
-6. **Open your browser** and go to: [http://127.0.0.1:8050](http://127.0.0.1:8050)
+7. **Open your browser** and go to: [http://127.0.0.1:8050](http://127.0.0.1:8050)
 
 ---
 
