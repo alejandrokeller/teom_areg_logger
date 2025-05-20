@@ -16,19 +16,71 @@ A browser-based dashboard provides real-time and historical data visualization.
    ```bash
    pip install -r requirements.txt
    ```
-4. **Edit the serial port** in `teom_areg_logger.py` to match your system:
-   ```python
-   SERIAL_PORT = 'COM30'  # Change to your TEOM's port
+4. **Create the default `config.ini` file:
+   ```bash
+   cp config.template config.ini
    ```
-5. **Start the logger**:
+5. **Edit `config.ini` according to the [configuration](#⚙️ Configuration) section below**
+6. **Start the logger**:
    ```bash
    python teom_areg_logger.py
    ```
-6. **In a second terminal**, start the dashboard server:
+7. **In a second terminal**, start the dashboard server:
    ```bash
    python teom_dashboard.py
    ```
-7. **Open your browser** and go to: [http://127.0.0.1:8050](http://127.0.0.1:8050)
+8. **Open your browser** and go to: [http://127.0.0.1:8050](http://127.0.0.1:8050)
+
+---
+
+## ⚙️ Configuration
+
+All configuration is now managed via the `config.ini` file.  
+This file centralizes logger and dashboard settings for easier modification without editing the Python scripts.
+
+### Sections
+- `[LOGGER]`: Controls serial port connection and log storage.
+- `[DASHBOARD]`: Controls data smoothing and default display settings.
+- `[LAMP_THRESHOLDS]`: Defines filter loading alert behavior (green/yellow/red).
+
+### `teom_areg_logger.py`
+
+| Variable              | Description                                                    | Default      |
+|-----------------------|----------------------------------------------------------------|--------------|
+| `SERIAL_PORT`         | Serial port connected to the TEOM                              | `'COM30'`    |
+| `BAUD_RATE`           | Serial port baud rate for communication with the TEOM          | `'9600'`     |
+| `QUERY_INTERVAL_SECONDS` | Data logging interval (in seconds)                          | `10`         |
+| `LOG_DIR`             | Folder where daily CSV logs are saved                          | `'logs'`     |
+| `TIME_FORMAT`         | Timestamp format for the CSV log file                          | `'%Y-%m-%d %H:%M:%S'`     |
+
+### `teom_dashboard.py`
+
+| Variable              | Description                                                    | Default      |
+|-----------------------|----------------------------------------------------------------|--------------|
+| `LOG_DIR`             | Directory where CSV logs are located                           | `'logs'`     |
+| `UNFILTERED_STEPS`    | Number of samples (back in time) to compute unfiltered mass    | `30`         |
+
+### Example `config.ini`
+
+```ini
+[LOGGER]
+serial_port = COM30
+baud_rate = 9600
+query_interval_seconds = 10
+log_dir = logs
+time_format = %Y-%m-%d %H:%M:%S
+
+[DASHBOARD]
+log_dir = logs
+unfiltered_steps = 30
+default_resample = False
+default_time_range = last_hour
+
+[LAMP_THRESHOLDS]
+yellow_threshold = 60
+red_threshold_flow_3 = 90
+red_threshold_flow_low = 80
+```
 
 ---
 
@@ -89,27 +141,6 @@ Fix it by upgrading the package:
 ```bash
 pip install --upgrade typing_extensions
 ```
-
----
-
-## ⚙️ Configuration
-
-A `config.ini` file is planned. For now, configuration is done by editing the Python scripts directly.
-
-### `teom_areg_logger.py`
-
-| Variable              | Description                                                    | Default      |
-|-----------------------|----------------------------------------------------------------|--------------|
-| `SERIAL_PORT`         | Serial port connected to the TEOM                              | `'COM30'`    |
-| `QUERY_INTERVAL_SECONDS` | Data logging interval (in seconds)                         | `10`         |
-| `LOG_DIR`             | Folder where daily CSV logs are saved                          | `'logs'`     |
-
-### `teom_dashboard.py`
-
-| Variable              | Description                                                    | Default      |
-|-----------------------|----------------------------------------------------------------|--------------|
-| `LOG_DIR`             | Directory where CSV logs are located                           | `'logs'`     |
-| `UNFILTERED_STEPS`    | Number of samples (back in time) to compute unfiltered mass    | `30`         |
 
 ---
 

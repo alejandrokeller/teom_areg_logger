@@ -2,15 +2,17 @@ import serial
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
+import configparser
 
-# === Configuration ===
-SERIAL_PORT = 'COM30'               # Update to match your system
-BAUD_RATE = 9600                    # Confirmed default for TEOM 1400AB
-QUERY_INTERVAL_SECONDS = 10
-TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+# === Load Configuration ===
+config = configparser.ConfigParser(interpolation=None)
+config.read('config.ini')
 
-# === Configure log directory
-LOG_DIR = Path('logs')  # directory to store logs
+SERIAL_PORT = config['LOGGER']['serial_port']
+BAUD_RATE = int(config['LOGGER']['baud_rate'])
+QUERY_INTERVAL_SECONDS = int(config['LOGGER']['query_interval_seconds'])
+TIME_FORMAT = config['LOGGER']['time_format']
+LOG_DIR = Path(config['LOGGER']['log_dir'])
 LOG_DIR.mkdir(exist_ok=True)
 
 def get_log_file_path():

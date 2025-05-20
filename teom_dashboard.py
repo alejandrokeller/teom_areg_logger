@@ -6,19 +6,24 @@ import plotly.express as px
 import plotly.graph_objects as go
 from pathlib import Path
 from datetime import datetime
+import configparser
 
-# === Configuration ===
-LOG_DIR = Path('logs')
-DEFAULT_LOG_FILE = LOG_DIR / f'teom_log_{datetime.now().strftime("%Y-%m-%d")}.csv'
-UNFILTERED_STEPS = 30
+# === Load Configuration ===
+config = configparser.ConfigParser(interpolation=None)
+config.read('config.ini')
+
+LOG_DIR = Path(config['DASHBOARD']['log_dir'])
+DEFAULT_LOG_FILE = LOG_DIR / f"teom_log_{datetime.now().strftime('%Y-%m-%d')}.csv"
+UNFILTERED_STEPS = int(config['DASHBOARD']['unfiltered_steps'])
+
+YELLOW_THRESHOLD = float(config['LAMP_THRESHOLDS']['yellow_threshold'])
+RED_THRESHOLD_FLOW_3 = float(config['LAMP_THRESHOLDS']['red_threshold_flow_3'])
+RED_THRESHOLD_FLOW_LOW = float(config['LAMP_THRESHOLDS']['red_threshold_flow_low'])
 
 app = dash.Dash(__name__)
 app.title = 'TEOM Logger Dashboard'
 
 def load_data():
-#     if DEFAULT_LOG_FILE.exists():
-#         return pd.read_csv(DEFAULT_LOG_FILE, encoding='latin1')  # or use 'utf-8-sig'
-#     return pd.DataFrame()
     all_files = sorted(LOG_DIR.glob('teom_log_*.csv'))
     df_list = []
     for f in all_files:
@@ -208,13 +213,13 @@ def update_live_display(n):
     # Determine lamp color and warning
     color = 'green'
     warning = ""
-    if loading >= 90:
+    if loading >= RED_THRESHOLD_FLOW_3:
         color = 'red'
         warning = "Replace filter soon!"
-    elif loading >= 80 and flow < 3:
+    elif loading >= RED_THRESHOLD_FLOW_LOW and flow < 3:
         color = 'red'
         warning = "Replace filter soon!"
-    elif loading >= 60:
+    elif loading >= YELLOW_THRESHOLD:
         color = 'yellow'
 
     lamp_style = {
@@ -294,15 +299,6 @@ def update_graph(selected_params, resample_freq, n, start_date, end_date, multi_
                 hovertemplate=None  # use default
             ))
 
-#     for i, param in enumerate(selected_params):
-#         axis_name = f'y{i+1}' if use_multi else 'y'
-#         fig.add_trace(go.Scatter(
-#             x=df_filtered['Timestamp'],
-#             y=df_filtered[param],
-#             name=param,
-#             yaxis=axis_name
-#         ))
-
     layout = {
         'title': f"{'Averaged ' if resample_freq else ''}Data from {start_dt:%Y-%m-%d %H:%M} to {end_dt:%Y-%m-%d %H:%M}",
         'xaxis_title': 'Time',
@@ -328,4 +324,3 @@ def update_graph(selected_params, resample_freq, n, start_date, end_date, multi_
 
 if __name__ == '__main__':
     app.run(debug=True)
-    #app.run_server(debug=True)

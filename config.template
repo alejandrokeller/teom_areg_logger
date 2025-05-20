@@ -1,0 +1,17 @@
+[LOGGER]
+serial_port = COM30
+baud_rate = 9600
+query_interval_seconds = 10
+log_dir = logs
+time_format = %Y-%m-%d %H:%M:%S
+
+[DASHBOARD]
+log_dir = logs
+unfiltered_steps = 30
+default_resample = False
+default_time_range = last_hour
+
+[LAMP_THRESHOLDS]
+yellow_threshold = 60
+red_threshold_flow_3 = 90
+red_threshold_flow_low = 80
