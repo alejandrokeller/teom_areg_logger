@@ -93,6 +93,7 @@ app.layout = html.Div([
             max_date_allowed=None,
             initial_visible_month=datetime.now().date(),
             display_format='YYYY-MM-DD',
+            minimum_nights=0,
             style={'marginTop': '10px'}
         )
         
@@ -278,8 +279,9 @@ def update_graph(selected_params, resample_freq, n, start_date, end_date, multi_
 
     start_dt = pd.to_datetime(start_date)
     end_dt = pd.to_datetime(end_date)
-    if end_dt == end_dt.normalize():
-        end_dt += pd.Timedelta(days=1)
+    if start_dt == end_dt:
+        # Extend end time to the end of the selected day
+        end_dt += pd.Timedelta(days=1) - pd.Timedelta(seconds=1)
 
     df_filtered = df[(df['Timestamp'] >= start_dt) & (df['Timestamp'] <= end_dt)]
 
@@ -297,7 +299,7 @@ def update_graph(selected_params, resample_freq, n, start_date, end_date, multi_
     
     for i, param in enumerate(selected_params):
         axis_name = f'y{i+1}' if use_multi else 'y'
-        if param == 'Derived Mass Concentration (µg/m3)' and 'delta_t (min)' in df_filtered.columns:
+        if param == 'Mass Concentration unfiltered (µg/m³)' and 'delta_t (min)' in df_filtered.columns:
             fig.add_trace(go.Scatter(
                 x=df_filtered['Timestamp'],
                 y=df_filtered[param],
@@ -307,7 +309,7 @@ def update_graph(selected_params, resample_freq, n, start_date, end_date, multi_
                 customdata=df_filtered[['delta_t (min)']].values,
                 hovertemplate=(
                     'Time: %{x}<br>'
-                    f'{param}: %{y} µg/m³<br>'
+                    f'{param}: %{{y}} µg/m³<br>'
                     'Δt: %{customdata} min<br>'
                     '<extra></extra>'
                 )
