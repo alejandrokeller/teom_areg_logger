@@ -47,7 +47,7 @@ The logger script `teom_areg_logger.py` records the following parameters from th
 | Main Flow                             | lpm      |
 | Aux Flow                              | lpm      |
 | Status                                | code     |
-| K0 Constant                           | N/A      |
+| K0 Constant                           | g/s²     |
 | Mass Concentration (30min Avg)        | µg/m³    |
 | Mass Concentration (1hr Avg)          | µg/m³    |
 | Serial Number                         | N/A      |
