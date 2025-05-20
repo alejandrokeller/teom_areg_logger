@@ -32,7 +32,7 @@ def load_data():
         df = pd.concat(df_list)
         df = df.dropna(subset=['Timestamp']).sort_values('Timestamp')
         # Calculate custome mass concentration
-        if {'Frequency (hz)', 'K0 Constant (N/A)', 'Main Flow (lpm)'}.issubset(df.columns):
+        if {'Frequency (hz)', 'K0 Constant (g/s²)', 'Main Flow (lpm)'}.issubset(df.columns):
             df = df.copy()
             df['Timestamp'] = pd.to_datetime(df['Timestamp'])
 
