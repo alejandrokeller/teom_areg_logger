@@ -69,18 +69,30 @@ def send_areg_query(ser, reg_code, retries=2):
 def log_teom_registers():
     try:
         with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2) as ser:
-            # Create CSV header if the file is new
+            current_day = datetime.now().date()
             log_file_path = get_log_file_path()
             if not log_file_path.exists():
-                with open(log_file_path, 'w') as f:
+                with open(log_file_path, 'w', encoding='utf-8') as f:
                     header = ['Timestamp'] + [f"{reg['label']} ({reg['unit']})" for reg in REGISTER_DEFINITIONS]
                     f.write(','.join(header) + '\n')
-
-            with open(log_file_path, 'a') as logfile:
                 print(f"[INFO] Logging TEOM AREG data to {log_file_path} every {QUERY_INTERVAL_SECONDS} seconds.")
-                while True:
+
+            while True:
+                if datetime.now().date() != current_day:
+                    current_day = datetime.now().date()
+                    log_file_path = get_log_file_path()
+                    if not log_file_path.exists():
+                        with open(log_file_path, 'w', encoding='utf-8') as f:
+                            header = ['Timestamp'] + [f"{reg['label']} ({reg['unit']})" for reg in REGISTER_DEFINITIONS]
+                            f.write(','.join(header) + '\n')
+                        print(f"[INFO] Logging TEOM AREG data to {log_file_path} every {QUERY_INTERVAL_SECONDS} seconds.") 
+                            
+                with open(log_file_path, 'a') as logfile:               
                     query_time = datetime.now()
+                    current_day = query_time.date()
+                    log_file_path = get_log_file_path()
                     next_query = query_time + timedelta(seconds=QUERY_INTERVAL_SECONDS)
+                    
                     timestamp = query_time.strftime(TIME_FORMAT)
                     values = []
                     for reg in REGISTER_DEFINITIONS:
