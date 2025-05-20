@@ -84,13 +84,18 @@ app.layout = html.Div([
             value='last_hour',
             clearable=False
         ),
+        
         dcc.DatePickerRange(
             id='date-range-picker',
             start_date=datetime.now().date(),
             end_date=datetime.now().date(),
+            min_date_allowed=None,
+            max_date_allowed=None,
+            initial_visible_month=datetime.now().date(),
             display_format='YYYY-MM-DD',
             style={'marginTop': '10px'}
         )
+        
     ], style={'marginBottom': '20px'}),
 
     html.Div([
@@ -123,6 +128,7 @@ app.layout = html.Div([
     ], style={'marginBottom': '20px'}),
     
     dcc.Store(id='selected-parameters-store'),
+    dcc.Store(id='available-dates-store'),
     
     html.Div([
         html.Div(id='main-flow-display', style={'fontSize': '18px', 'marginBottom': '5px'}),
@@ -170,13 +176,32 @@ def store_selected_parameters(value):
         return []
     return value if isinstance(value, list) else [value]
 
+# Callback 1: only update available log dates
+@app.callback(
+    Output('date-range-picker', 'min_date_allowed'),
+    Output('date-range-picker', 'max_date_allowed'),
+    Output('available-dates-store', 'data'),
+    Input('interval-update', 'n_intervals')
+)
+def update_available_dates(_):
+    all_files = sorted(LOG_DIR.glob('teom_log_*.csv'))
+    if not all_files:
+        return None, None, []
+
+    dates = [f.stem.replace('teom_log_', '') for f in all_files]
+    parsed = [datetime.strptime(d, "%Y-%m-%d").date() for d in dates]
+
+    return min(parsed), max(parsed), sorted(set(str(d) for d in parsed))
+
+# Callback 2: update date range only on preset change
 @app.callback(
     Output('date-range-picker', 'start_date'),
     Output('date-range-picker', 'end_date'),
     Input('preset-dropdown', 'value'),
-    Input('interval-update', 'n_intervals')
+    State('date-range-picker', 'start_date'),
+    State('date-range-picker', 'end_date')
 )
-def update_date_range(preset, _):
+def update_date_range_from_preset(preset, current_start, current_end):
     now = datetime.now()
     if preset == 'last_hour':
         return now - pd.Timedelta(hours=1), now
@@ -189,11 +214,10 @@ def update_date_range(preset, _):
     elif preset == 'this_month':
         return now.replace(day=1).date(), now
     elif preset == 'custom':
-        # Don't change anything
         raise dash.exceptions.PreventUpdate
     else:
-        return now - pd.Timedelta(hours=6), now
-    
+        return current_start, current_end
+
 @app.callback(
     Output('main-flow-display', 'children'),
     Output('filter-loading-display', 'children'),
@@ -237,7 +261,6 @@ def update_live_display(n):
         lamp_style,
         warning
     )
-
 
 @app.callback(
     Output('parameter-graph', 'figure'),
