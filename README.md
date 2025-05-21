@@ -110,8 +110,8 @@ The logger script `teom_areg_logger.py` records the following parameters from th
 
 | Parameter                             | Unit     |
 |---------------------------------------|----------|
-| Mass Rate                             | µg/h     |
 | Mass Concentration                    | µg/m³    |
+| Mass Rate                             | µg/h     |
 | Total Mass                            | µg       |
 | Frequency                             | hz       |
 | Noise                                 | µg       |

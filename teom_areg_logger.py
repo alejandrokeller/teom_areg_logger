@@ -21,8 +21,8 @@ def get_log_file_path():
 
 # === Register Definitions ===
 REGISTER_DEFINITIONS = [
-    {'code':   '7', 'label': 'Mass Rate', 'unit': 'µg/h'},
     {'code':   '8', 'label': 'Mass Concentration', 'unit': 'µg/m³'},
+    {'code':   '7', 'label': 'Mass Rate', 'unit': 'µg/h'},
     {'code':   '9', 'label': 'Total Mass', 'unit': 'µg'},
     {'code':  '12', 'label': 'Frequency', 'unit': 'hz'},
     {'code':  '13', 'label': 'Noise', 'unit': 'µg'},

@@ -193,7 +193,10 @@ def update_dropdown(n, stored_selection):
     options = [{'label': col, 'value': col} for col in df.columns if col != 'Timestamp']
     available = [opt['value'] for opt in options]
 
-    preserved = [v for v in (stored_selection or []) if v in available]
+    if stored_selection is None and available:
+        preserved = [available[0]]
+    else:
+        preserved = [v for v in stored_selection if v in available] if stored_selection else []
     return options, preserved
 
 @app.callback(
