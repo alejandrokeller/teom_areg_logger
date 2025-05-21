@@ -186,13 +186,13 @@ K0 × (1/f1² − 1/f0²) × 10^9 / flow / Δt
 ```
 
 Where:
-- `f0` is the frequency in hz from `UNFILTERED_STEPS` measurements ago (configurable)
-- `f1` is the current frequency in hz
-- `K0` is the TEOM calibration constant
-- `flow` is the current main flow in lpm
+- `f0` is the former transducer frequency (`UNFILTERED_STEPS` back in time; configurable) (hz)
+- `f1` is the new transducer frequency (hz)
+- `K0` is the TEOM calibration constant (g/s²)
+- `flow` is the TEOM main flow rate (lpm)
 - `Δt` is the time in minutes between `f0` and `f1`
 
-You can adjust the `UNFILTERED_STEPS` to match the averaging period you want (e.g. 30 steps at 10s = 5 min).
+You can adjust the `UNFILTERED_STEPS` to match the averaging period you want (e.g. 30 steps at 10s/step => 5 min).
 
 ---
 
