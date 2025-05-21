@@ -11,7 +11,7 @@ A browser-based dashboard provides real-time and historical data visualization.
 - [📋 Logged Parameters](#-logged-parameters)
 - [📊 Dashboard Overview](#-dashboard-overview)
 - [🐛 Troubleshooting](#-troubleshooting)
-- [🧪 About the Derived Mass Concentration](#-about-the-derived-mass-concentration)
+- [🧪 About the Unfiltered Mass Concentration](#-about-the-unfiltered-mass-concentration)
 - [📄 License](#-license)
 
 ---
@@ -128,6 +128,8 @@ The logger script `teom_areg_logger.py` records the following parameters from th
 
 These are retrieved via AREG queries and saved to a daily CSV file.
 
+Refer to the [TEOM 1400AB manual](manual-1400ab/EPM-manual-TEOM1400ab.pdf) (Appendices B and C) for parameter definitions and their correponding registry value.
+
 ## 📊 Dashboard Overview
 
 The dashboard provides an interactive, browser-based interface to visualize and monitor TEOM 1400AB data. Key features include:
@@ -164,17 +166,19 @@ pip install --upgrade typing_extensions
 
 ---
 
-## 🧪 About the Derived Mass Concentration
+## 🧪 About the Unfiltered Mass Concentration
 
 The TEOM reports:
 - 30-minute average mass concentration
 - 1-hour average mass concentration
 - A smoothed 5-minute running average
 
-However, the smoothed 5-minute value is filtered and may exclude short-term fluctuations.  
-The dashboard calculates a parallel **unfiltered running average** using:
+However, the smoothed 5-minute value, wich undergoes internal smoothing beyond a simple average.
+The resulting value may exclude, e.g., short-term fluctuations.  
+For a better view of the data, the dashboard calculates a parallel **unfiltered running average** based solently on the accumulated mass in the filter during a fix number of sampling steps.
+This calculation is derived from section 1.5.2 of the [TEOM manual](manual-1400ab/EPM-manual-TEOM1400ab.pdf):
 
-### **Derived Mass Concentration (µg/m³)**
+### **Unfiltered Mass Concentration**
 Calculated from the frequency change over time:
 
 ```
@@ -189,8 +193,6 @@ Where:
 - `Δt` is the time in minutes between `f0` and `f1`
 
 You can adjust the `UNFILTERED_STEPS` to match the averaging period you want (e.g. 30 steps at 10s = 5 min).
-
-Refer to the TEOM 1400AB manual (Appendices B and C) for register definitions and formula references.
 
 ---
 
