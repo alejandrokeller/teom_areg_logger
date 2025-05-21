@@ -338,7 +338,8 @@ def update_graph(selected_params, resample_freq, n, start_date, end_date, multi_
                 customdata=df_filtered[['delta_t (min)']].values,
                 hovertemplate=(
                     'Time: %{x}<br>'
-                    f'{param}: %{{y}} µg/m³<br>'
+                    #f'{param}: %{{y}} µg/m³<br>'
+                    f'{param}: %{{y}}<br>'
                     'Δt: %{customdata} min<br>'
                     '<extra></extra>'
                 )
@@ -350,7 +351,12 @@ def update_graph(selected_params, resample_freq, n, start_date, end_date, multi_
                 mode='lines',
                 name=param,
                 yaxis=axis_name,
-                hovertemplate=None  # use default
+                #hovertemplate=None  # use default
+                hovertemplate=(
+                    'Time: %{x}<br>'
+                    f'{param}: %{{y}}<br>'
+                    '<extra></extra>'
+                )
             ))
 
     layout = {
@@ -373,6 +379,8 @@ def update_graph(selected_params, resample_freq, n, start_date, end_date, multi_
     else:
         layout['yaxis'] = {'title': 'Value'}
 
+    # Static prevents the layout from reseting (e.g., zoom)
+    layout['uirevision'] = "static"  
     fig.update_layout(**layout)
     return fig
 
