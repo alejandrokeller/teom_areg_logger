@@ -169,15 +169,17 @@ This calculation is derived from section 1.5.2 of the [TEOM manual](manual-1400a
 Calculated from the frequency change over time:
 
 ```
-M = K0 × (1/f1² − 1/f0²) × 10^9 / flow / Δt
+M = K0 × (1/f1² − 1/f0²) / (flow × Δt)
 ```
 
+$$M = \frac{K_0 (f_1^{-2} − f_0^{-2})}{Q\delta t}$$
+
 Where:
-- `f0` is the former transducer frequency (`UNFILTERED_STEPS` back in time; configurable) (hz)
-- `f1` is the new transducer frequency (hz)
-- `K0` is the TEOM calibration constant (g/s²)
-- `flow` is the TEOM main flow rate (lpm)
-- `Δt` is the time in minutes between `f0` and `f1`
+- `f0` is the former transducer frequency (`UNFILTERED_STEPS` back in time; configurable)
+- `f1` is the new transducer frequency
+- `K0` is the TEOM calibration constant
+- `flow` is the TEOM main flow rate
+- `Δt` is the elapsed time between the samples corresponding to `f0` and `f1`
 
 You can adjust the `UNFILTERED_STEPS` to match the averaging period you want (e.g. 30 steps at 10s/step => 5 min).
 
