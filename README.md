@@ -10,8 +10,8 @@ A browser-based dashboard provides real-time and historical data visualization.
 - [⚙️ Configuration](#️-configuration)
 - [📋 Logged Parameters](#-logged-parameters)
 - [📊 Dashboard Overview](#-dashboard-overview)
-- [🐛 Troubleshooting](#-troubleshooting)
 - [🧪 About the Unfiltered Mass Concentration](#-about-the-unfiltered-mass-concentration)
+- [🐛 Troubleshooting](#-troubleshooting)
 - [📄 License](#-license)
 
 ---
@@ -153,19 +153,6 @@ The dashboard provides an interactive, browser-based interface to visualize and 
 
 ---
 
-## 🐛 Troubleshooting
-
-If you encounter this error:
-```
-AttributeError: module 'typing_extensions' has no attribute 'Generic'
-```
-Fix it by upgrading the package:
-```bash
-pip install --upgrade typing_extensions
-```
-
----
-
 ## 🧪 About the Unfiltered Mass Concentration
 
 The TEOM reports:
@@ -178,11 +165,11 @@ The resulting value may exclude, e.g., short-term fluctuations.
 For a better view of the data, the dashboard calculates a parallel **unfiltered running average** based solently on the accumulated mass in the filter during a fix number of sampling steps.
 This calculation is derived from section 1.5.2 of the [TEOM manual](manual-1400ab/EPM-manual-TEOM1400ab.pdf):
 
-### **Unfiltered Mass Concentration**
+### **Unfiltered Mass Concentration, `M`**
 Calculated from the frequency change over time:
 
 ```
-K0 × (1/f1² − 1/f0²) × 10^9 / flow / Δt
+M = K0 × (1/f1² − 1/f0²) × 10^9 / flow / Δt
 ```
 
 Where:
@@ -193,6 +180,19 @@ Where:
 - `Δt` is the time in minutes between `f0` and `f1`
 
 You can adjust the `UNFILTERED_STEPS` to match the averaging period you want (e.g. 30 steps at 10s/step => 5 min).
+
+---
+
+## 🐛 Troubleshooting
+
+If you encounter this error:
+```
+AttributeError: module 'typing_extensions' has no attribute 'Generic'
+```
+Fix it by upgrading the package:
+```bash
+pip install --upgrade typing_extensions
+```
 
 ---
 
