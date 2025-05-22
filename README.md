@@ -67,7 +67,6 @@ This file centralizes logger and dashboard settings for easier modification with
 
 | Variable               | Description                                                    | Default      |
 |------------------------|----------------------------------------------------------------|--------------|
-| `UNFILTERED_STEPS`     | Number of samples (back in time) to compute unfiltered mass    | `30`         |
 | `LOG_DIR`              | Directory where CSV logs are located                           | `logs`       |
 | `UNFILTERED_STEPS`     | Number of samples (back in time) to compute unfiltered mass    | `30`         |
 | `DEFAULT_RESAMPLE`     | Smoothing interval. Use `'False'` for raw data (see list)      | `False`      |
