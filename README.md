@@ -165,21 +165,17 @@ The resulting value may exclude, e.g., short-term fluctuations.
 For a better view of the data, the dashboard calculates a parallel **unfiltered running average** based solently on the accumulated mass in the filter during a fix number of sampling steps.
 This calculation is derived from section 1.5.2 of the [TEOM manual](manual-1400ab/EPM-manual-TEOM1400ab.pdf):
 
-### **Unfiltered Mass Concentration, `M`**
+### **Unfiltered Mass Concentration, $M$**
 Calculated from the frequency change over time:
 
-```
-M = K0 × (1/f1² − 1/f0²) / (flow × Δt)
-```
-
-$$M = \frac{K_0 (f_1^{-2} − f_0^{-2})}{Q\delta t}$$
+$$M = \frac{K_0 (f_1^{-2} − f_0^{-2})}{Q\Delta t}$$
 
 Where:
-- `f0` is the former transducer frequency (`UNFILTERED_STEPS` back in time; configurable)
-- `f1` is the new transducer frequency
-- `K0` is the TEOM calibration constant
-- `flow` is the TEOM main flow rate
-- `Δt` is the elapsed time between the samples corresponding to `f0` and `f1`
+- $f_0$ is the former transducer frequency (`UNFILTERED_STEPS` back in time; configurable)
+- $f_1$ is the new transducer frequency
+- $K_0$ is the TEOM calibration constant
+- $Q$ is the TEOM main flow rate
+- $\Delta t$ is the elapsed time between the samples corresponding to $f_0$ and $f_1$
 
 You can adjust the `UNFILTERED_STEPS` to match the averaging period you want (e.g. 30 steps at 10s/step => 5 min).
 
